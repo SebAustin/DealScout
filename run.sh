@@ -7,19 +7,27 @@ cd "$ROOT"
 PY="${PY:-python3.12}"
 if ! command -v "$PY" &>/dev/null; then PY=python3; fi
 
-if [ ! -d .venv ]; then
-  "$PY" -m venv .venv
-  source .venv/bin/activate
-  pip install --index-url https://pypi.org/simple -r requirements.txt
-  pip install --index-url https://pypi.org/simple -e .
-else
-  source .venv/bin/activate
+VENV="$ROOT/.venv"
+VENV_PY="$VENV/bin/python"
+VENV_UVICORN="$VENV/bin/uvicorn"
+VENV_STREAMLIT="$VENV/bin/streamlit"
+
+_venv_ok() {
+  [ -x "$VENV_PY" ] && "$VENV_PY" -c "import fastapi, streamlit, langgraph" &>/dev/null
+}
+
+if [ ! -d "$VENV" ] || ! _venv_ok; then
+  echo "Creating virtualenv in .venv (Python: $PY)..."
+  rm -rf "$VENV"
+  "$PY" -m venv "$VENV"
+  "$VENV_PY" -m pip install --index-url https://pypi.org/simple -r requirements.txt
 fi
 
 [ -f .env ] || cp .env.example .env
 
 export PYTHONPATH="$ROOT"
 export DEMO_MODE="${DEMO_MODE:-true}"
+export PATH="$VENV/bin:$PATH"
 API_PORT="${API_PORT:-8000}"
 
 _free_port() {
@@ -44,17 +52,17 @@ case "${1:-all}" in
   api)
     _free_port
     echo "DealPulse Scout API (demo pipeline v2) on :$API_PORT"
-    uvicorn "${_uvicorn_args[@]}"
+    exec "$VENV_UVICORN" "${_uvicorn_args[@]}"
     ;;
   ui)
-    streamlit run ui/app.py
+    exec "$VENV_STREAMLIT" run ui/app.py
     ;;
   all)
     _free_port
     echo "DealPulse Scout API (demo pipeline v2) on :$API_PORT + UI on :8501 (DEMO_MODE=$DEMO_MODE)"
-    uvicorn "${_uvicorn_args[@]}" &
+    "$VENV_UVICORN" "${_uvicorn_args[@]}" &
     sleep 2
-    streamlit run ui/app.py
+    exec "$VENV_STREAMLIT" run ui/app.py
     ;;
   *)
     echo "Usage: ./run.sh [api|ui|all]"

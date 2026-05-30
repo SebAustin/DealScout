@@ -16,7 +16,6 @@ Manual setup:
 ```bash
 python3.12 -m venv .venv && source .venv/bin/activate
 pip install --index-url https://pypi.org/simple -r requirements.txt
-pip install --index-url https://pypi.org/simple -e .
 cp .env.example .env
 python serve_api.py   # Terminal 1
 python serve_ui.py    # Terminal 2
@@ -143,7 +142,7 @@ run.sh           # One-command launcher
 | URL has `minYear=2026&maxYear=2026` | Stale API — restart; demo links no longer pin year |
 | All three scores identical | Stale API — restart; v2 uses tiered demo discounts |
 | Streamlit toggle doesn't change behavior | API reads `.env` at startup — restart after editing `.env` |
-| `ModuleNotFoundError` | Run from repo root with `PYTHONPATH=.` or `pip install -e .` |
+| `ModuleNotFoundError` | Run from repo root via `./run.sh` (sets `PYTHONPATH=.` automatically) |
 
 ## Hackathon Notes
 

@@ -24,6 +24,5 @@ dependencies = [
 where = ["."]
 include = ["agents*", "api*", "db*", "tools*"]
 
-[tool.setuptools.py-modules]
-config = "config"
-llm = "llm"
+[tool.setuptools]
+py-modules = ["config", "llm"]
