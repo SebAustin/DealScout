@@ -12,13 +12,46 @@ if str(_ROOT) not in sys.path:
 import httpx
 import streamlit as st
 
-from agents.query_parse import parse_query
-from db.demo_gen import synthesize_listings
 from db.urls import is_demo_placeholder
 
 API_URL = os.getenv("API_URL", "http://localhost:8000")
 DEMO_MODE = os.getenv("DEMO_MODE", "true").lower() == "true"
 EXPECTED_PIPELINE = "v2"
+
+def _api_reachable() -> bool:
+    try:
+        r = httpx.get(f"{API_URL}/health", timeout=2.5)
+        return r.status_code == 200
+    except Exception:
+        return False
+
+
+def _sync_demo_mode() -> None:
+    """Keep config.DEMO_MODE aligned with UI toggle / secrets."""
+    import config
+    config.DEMO_MODE = os.getenv("DEMO_MODE", "true").lower() == "true"
+
+
+def _embedded_search(q: str) -> tuple[list[str], list[dict]]:
+    """Run LangGraph pipeline in-process (Streamlit Cloud / no FastAPI)."""
+    import asyncio
+    from agents.graph import run_search_stream
+
+    _sync_demo_mode()
+    logs: list[str] = []
+    deals: list[dict] = []
+
+    async def _run() -> None:
+        nonlocal deals
+        async for event in run_search_stream(q):
+            if event.get("type") == "log":
+                logs.append(event.get("message", ""))
+            elif event.get("type") == "result":
+                deals = event.get("deals", [])
+
+    asyncio.run(_run())
+    return logs, deals
+
 
 st.set_page_config(page_title="DealPulse Scout", page_icon="🚗", layout="wide")
 st.title("🚗 DealPulse Scout")
@@ -42,16 +75,7 @@ with col2:
 
 log_area = st.empty()
 results_area = st.container()
-
-
-def _offline_deals(q: str) -> list[dict]:
-    plan = parse_query(q)
-    if not plan.get("make"):
-        return []
-    deals = synthesize_listings(q, plan, limit=3)
-    for i, d in enumerate(deals, 1):
-        d["rank"] = i
-    return deals
+USE_API = _api_reachable()
 
 
 def render_deal(deal: dict):
@@ -82,28 +106,34 @@ if search_btn and query:
     deals: list[dict] = []
 
     with st.spinner("Agents working..."):
-        try:
-            with httpx.stream(
-                "GET",
-                f"{API_URL}/search",
-                params={"q": query, "stream": "true"},
-                timeout=120.0,
-            ) as resp:
-                resp.raise_for_status()
-                for line in resp.iter_lines():
-                    if not line.startswith("data: "):
-                        continue
-                    event = json.loads(line[6:])
-                    if event.get("type") == "log":
-                        logs.append(event.get("message", ""))
-                        log_area.code("\n".join(logs[-20:]), language=None)
-                    elif event.get("type") == "result":
-                        deals = event.get("deals", [])
-                    elif event.get("type") == "error":
-                        st.error(event.get("message"))
-        except httpx.ConnectError:
-            st.warning("API not running — showing offline simulated deals.")
-            deals = _offline_deals(query)
+        use_api = USE_API
+        if use_api:
+            try:
+                with httpx.stream(
+                    "GET",
+                    f"{API_URL}/search",
+                    params={"q": query, "stream": "true"},
+                    timeout=120.0,
+                ) as resp:
+                    resp.raise_for_status()
+                    for line in resp.iter_lines():
+                        if not line.startswith("data: "):
+                            continue
+                        event = json.loads(line[6:])
+                        if event.get("type") == "log":
+                            logs.append(event.get("message", ""))
+                            log_area.code("\n".join(logs[-20:]), language=None)
+                        elif event.get("type") == "result":
+                            deals = event.get("deals", [])
+                        elif event.get("type") == "error":
+                            st.error(event.get("message"))
+            except httpx.HTTPError:
+                use_api = False
+
+        if not use_api:
+            logs, deals = _embedded_search(query)
+            if logs:
+                log_area.code("\n".join(logs[-20:]), language=None)
 
     with results_area:
         st.subheader("Top 3 Deals")
@@ -117,22 +147,23 @@ elif search_btn:
     st.warning("Enter a search query first.")
 
 with st.sidebar:
-    st.header("API status")
-    try:
-        health = httpx.get(f"{API_URL}/health", timeout=3.0).json()
-        pipeline = health.get("pipeline", "unknown")
-        st.success(f"API online · pipeline **{pipeline}**")
-        if pipeline != EXPECTED_PIPELINE:
-            st.warning(
-                f"Stale API detected (expected {EXPECTED_PIPELINE}). "
-                "Stop and restart `./run.sh`."
-            )
-    except Exception:
-        st.error("API offline — start with `./run.sh`")
+    st.header("Runtime")
+    if USE_API:
+        try:
+            health = httpx.get(f"{API_URL}/health", timeout=3.0).json()
+            pipeline = health.get("pipeline", "unknown")
+            st.success(f"FastAPI online · pipeline **{pipeline}**")
+            if pipeline != EXPECTED_PIPELINE:
+                st.warning(f"Stale API (expected {EXPECTED_PIPELINE}). Restart `./run.sh`.")
+        except Exception:
+            st.info(f"Embedded pipeline **{EXPECTED_PIPELINE}** · demo mode")
+    else:
+        st.info(f"Embedded pipeline **{EXPECTED_PIPELINE}** · demo mode")
+        st.caption(
+            "Streamlit Cloud runs the LangGraph agents in-process. "
+            "For FastAPI + SSE locally, use `./run.sh`."
+        )
 
-    st.header("Setup")
-    st.code(
-        "curl -s http://localhost:8000/health\n./run.sh",
-        language="bash",
-    )
+    st.header("Local setup")
+    st.code("curl -s http://localhost:8000/health\n./run.sh", language="bash")
     st.markdown("**Stack:** LangGraph · Bright Data MCP · Claude · FastAPI · Streamlit")
