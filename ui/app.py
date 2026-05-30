@@ -5,9 +5,9 @@ import os
 import httpx
 import streamlit as st
 
-from dealscout.agents.query_parse import parse_query
-from dealscout.db.demo_gen import synthesize_listings
-from dealscout.db.urls import is_demo_placeholder
+from agents.query_parse import parse_query
+from db.demo_gen import synthesize_listings
+from db.urls import is_demo_placeholder
 
 API_URL = os.getenv("API_URL", "http://localhost:8000")
 DEMO_MODE = os.getenv("DEMO_MODE", "true").lower() == "true"
@@ -118,14 +118,14 @@ with st.sidebar:
         if pipeline != EXPECTED_PIPELINE:
             st.warning(
                 f"Stale API detected (expected {EXPECTED_PIPELINE}). "
-                "Stop and restart `./dealscout/run.sh`."
+                "Stop and restart `./run.sh`."
             )
     except Exception:
-        st.error("API offline — start with `./dealscout/run.sh`")
+        st.error("API offline — start with `./run.sh`")
 
     st.header("Setup")
     st.code(
-        "curl -s http://localhost:8000/health\n./dealscout/run.sh",
+        "curl -s http://localhost:8000/health\n./run.sh",
         language="bash",
     )
     st.markdown("**Stack:** LangGraph · Bright Data MCP · Claude · FastAPI · Streamlit")

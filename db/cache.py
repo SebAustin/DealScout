@@ -6,9 +6,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from dealscout.config import DB_PATH, DEMO_MODE
-from dealscout.db.demo_gen import synthesize_listings
-from dealscout.db.urls import demo_url, is_demo_placeholder, is_stale_cargurus_url
+from config import DB_PATH, DEMO_MODE
+from db.demo_gen import synthesize_listings
+from db.urls import demo_url, is_demo_placeholder, is_stale_cargurus_url
 
 logger = logging.getLogger(__name__)
 

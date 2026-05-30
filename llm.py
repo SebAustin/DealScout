@@ -5,7 +5,7 @@ from typing import Any
 
 from anthropic import AsyncAnthropic
 
-from dealscout.config import ANTHROPIC_API_KEY, ANTHROPIC_MODEL
+from config import ANTHROPIC_API_KEY, ANTHROPIC_MODEL
 
 logger = logging.getLogger(__name__)
 _client: AsyncAnthropic | None = None

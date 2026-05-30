@@ -8,16 +8,15 @@ LangGraph multi-agent car deal finder for the **Web Data Unlocked** hackathon. P
 
 ```bash
 # From repo root — one command
-./dealscout/run.sh
+./run.sh
 ```
 
 Manual setup:
 
 ```bash
-cd dealscout
 python3.12 -m venv .venv && source .venv/bin/activate
 pip install --index-url https://pypi.org/simple -r requirements.txt
-pip install --index-url https://pypi.org/simple -e ..
+pip install --index-url https://pypi.org/simple -e .
 cp .env.example .env
 python serve_api.py   # Terminal 1
 python serve_ui.py    # Terminal 2
@@ -123,15 +122,16 @@ curl "http://localhost:8000/search?q=honda+civic&stream=false"
 ## Project Layout
 
 ```
-dealscout/
-├── agents/          # LangGraph nodes (coordinator, scraper, normalizer, scorer, ranker)
-├── tools/           # Bright Data MCP client
-├── api/             # FastAPI + SSE
-├── ui/              # Streamlit frontend
-├── db/              # demo_gen, urls, geo, SQLite cache (legacy seed)
-├── docs/            # Architecture + judge runbook
-├── presentation/    # Slide deck (PDF) + video script
-└── data/            # cache.db (auto-created)
+agents/          # LangGraph nodes
+tools/           # Bright Data MCP client
+api/             # FastAPI + SSE
+ui/              # Streamlit frontend
+db/              # demo_gen, urls, geo, SQLite cache (legacy seed)
+docs/            # Architecture + judge runbook
+presentation/    # Slide deck (PDF) + video script
+data/            # cache.db (auto-created)
+config.py        # Environment config
+run.sh           # One-command launcher
 ```
 
 ## Troubleshooting
@@ -143,7 +143,7 @@ dealscout/
 | URL has `minYear=2026&maxYear=2026` | Stale API — restart; demo links no longer pin year |
 | All three scores identical | Stale API — restart; v2 uses tiered demo discounts |
 | Streamlit toggle doesn't change behavior | API reads `.env` at startup — restart after editing `.env` |
-| `ModuleNotFoundError: dealscout` | Run from repo root with `PYTHONPATH=.` or `pip install -e ..` |
+| `ModuleNotFoundError` | Run from repo root with `PYTHONPATH=.` or `pip install -e .` |
 
 ## Hackathon Notes
 

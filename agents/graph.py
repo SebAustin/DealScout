@@ -4,13 +4,13 @@ from typing import Any, AsyncIterator
 
 from langgraph.graph import END, StateGraph
 
-from dealscout.agents.coordinator import coordinator_node
-from dealscout.agents.normalizer import normalizer_node
-from dealscout.agents.ranker import ranker_node
-from dealscout.agents.scorer import scorer_node
-from dealscout.agents.scraper import scraper_node
-from dealscout.agents.state import DealScoutState
-from dealscout.config import DEMO_MODE
+from agents.coordinator import coordinator_node
+from agents.normalizer import normalizer_node
+from agents.ranker import ranker_node
+from agents.scorer import scorer_node
+from agents.scraper import scraper_node
+from agents.state import DealScoutState
+from config import DEMO_MODE
 
 logger = logging.getLogger(__name__)
 

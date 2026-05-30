@@ -11,7 +11,7 @@
 - [ ] Close unrelated apps; enable Do Not Disturb
 - [ ] Terminal + browser at 1080p or 1440p; zoom 100–125%
 - [ ] Mic test — quiet room, pop filter if available
-- [ ] Run `./dealscout/run.sh` from repo root **before** hitting Record
+- [ ] Run `./run.sh` from repo root **before** hitting Record
 - [ ] Verify sidebar: **API online · pipeline v2**
 - [ ] Have these tabs ready: Streamlit (`localhost:8501`), terminal, optional CarGurus
 - [ ] Optional: drop screenshots into slide 7 placeholder before recording B-roll
@@ -45,7 +45,7 @@
 | **2:30–3:00** | 6 | "Claude handles query parsing, listing extraction from raw HTML, and deal scoring against market data. If the LLM is unavailable, heuristic fallbacks keep the demo running — important for a live hackathon stage." | Slide 6 |
 | **3:00–3:30** | 9 | "Demo mode synthesizes listings so judges always get a result without API keys. Live mode — set DEMO_MODE false in dot-env — scrapes real pages and scores with Claude. Same pipeline, same UI." | Slide 9; optional: `curl -s localhost:8000/health` showing pipeline v2 |
 | **3:30–3:50** | 11 | "Limitations: we map about twenty CarGurus make-model entity IDs; unknown brands fall back to make-only search. Demo cards aren't exact VINs — they're proof that real inventory exists for your query." | Slide 11 |
-| **3:50–4:00** | 12 | "One command to run it: dot slash dealscout slash run.sh. Thanks — happy to take questions." | Slide 12 or terminal with run.sh |
+| **3:50–4:00** | 12 | "One command to run it: `./run.sh`. Thanks — happy to take questions." | Slide 12 or terminal with run.sh |
 
 ---
 
@@ -61,7 +61,7 @@
 
 ## B-Roll Shot List
 
-1. `./dealscout/run.sh` starting — terminal output "pipeline v2"
+1. `./run.sh` starting — terminal output "pipeline v2"
 2. `curl -s http://localhost:8000/health` JSON response
 3. Streamlit sidebar health check (green, pipeline v2)
 4. Agent log scrolling during search
@@ -74,7 +74,7 @@
 
 ## Fallback Narration (demo broken)
 
-> "The API runs on FastAPI with Server-Sent Events — each agent node emits log lines you can see here in the terminal output. The final event contains the top three deals JSON. The architecture is LangGraph with Bright Data MCP for live scraping and Claude for scoring. Run `./dealscout/run.sh` to try it locally."
+> "The API runs on FastAPI with Server-Sent Events — each agent node emits log lines you can see here in the terminal output. The final event contains the top three deals JSON. The architecture is LangGraph with Bright Data MCP for live scraping and Claude for scoring. Run `./run.sh` to try it locally."
 
 Show: `curl -N "http://localhost:8000/search?q=bmw+x5+austin+under+75k"` output + slides PDF.
 

@@ -2,9 +2,9 @@
 import logging
 from typing import Any
 
-from dealscout.agents.query_parse import parse_query
-from dealscout.agents.state import DealScoutState, SearchPlan
-from dealscout.llm import ask_json
+from agents.query_parse import parse_query
+from agents.state import DealScoutState, SearchPlan
+from llm import ask_json
 
 logger = logging.getLogger(__name__)
 

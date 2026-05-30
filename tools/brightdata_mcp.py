@@ -5,7 +5,7 @@ from typing import Any
 from langchain_core.tools import BaseTool
 from langchain_mcp_adapters.client import MultiServerMCPClient
 
-from dealscout.config import BRIGHT_DATA_TOKEN, MCP_SSE_URL
+from config import BRIGHT_DATA_TOKEN, MCP_SSE_URL
 
 logger = logging.getLogger(__name__)
 

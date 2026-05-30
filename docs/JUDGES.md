@@ -4,7 +4,7 @@
 
 ```bash
 cd "Web Data Unlocked"    # repo root
-./dealscout/run.sh
+./run.sh
 ```
 
 Wait for:
@@ -23,7 +23,7 @@ curl -s http://localhost:8000/health
 # {"status":"ok","demo_mode":true,"pipeline":"v2"}
 ```
 
-If pipeline is not `v2`, press Ctrl+C and run `./dealscout/run.sh` again.
+If pipeline is not `v2`, press Ctrl+C and run `./run.sh` again.
 
 ## 3. Search (20 s)
 
@@ -53,7 +53,7 @@ Expand deal #1 → click **Browse similar on CarGurus →**
 | Deal scores and "market price" | CarGurus / AutoTrader / Craigslist pages |
 | Agent pipeline flow and SSE logs | LangGraph + FastAPI architecture |
 
-Set `DEMO_MODE=false` in `dealscout/.env` and restart for live Bright Data scraping (requires API tokens).
+Set `DEMO_MODE=false` in `.env` and restart for live Bright Data scraping (requires API tokens).
 
 ## Quick API Test (no UI)
 
@@ -63,5 +63,5 @@ curl -N "http://localhost:8000/search?q=bmw+x5+austin+under+75k" | head -20
 
 ## Presentation
 
-- Slides: `dealscout/presentation/DealPulse_Scout_Slides.pdf`
-- Video script: `dealscout/presentation/VIDEO_SCRIPT.md`
+- Slides: `presentation/DealPulse_Scout_Slides.pdf`
+- Video script: `presentation/VIDEO_SCRIPT.md`

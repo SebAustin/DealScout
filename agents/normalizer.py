@@ -3,11 +3,11 @@ import logging
 from datetime import datetime, timezone
 from typing import Any
 
-from dealscout.agents.query_parse import parse_query
-from dealscout.agents.state import DealScoutState, Listing
-from dealscout.config import DEMO_MODE
-from dealscout.db.demo_gen import synthesize_listings
-from dealscout.llm import ask_json
+from agents.query_parse import parse_query
+from agents.state import DealScoutState, Listing
+from config import DEMO_MODE
+from db.demo_gen import synthesize_listings
+from llm import ask_json
 
 logger = logging.getLogger(__name__)
 

@@ -1,7 +1,7 @@
 """Ranker agent — returns top 3 scored deals."""
 from typing import Any
 
-from dealscout.agents.state import DealScoutState, ScoredDeal
+from agents.state import DealScoutState, ScoredDeal
 
 
 async def ranker_node(state: DealScoutState) -> dict[str, Any]:

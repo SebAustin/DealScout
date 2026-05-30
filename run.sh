@@ -1,21 +1,22 @@
 #!/usr/bin/env bash
 # One-command demo launcher for judges
 set -e
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+ROOT="$(cd "$(dirname "$0")" && pwd)"
 cd "$ROOT"
 
 PY="${PY:-python3.12}"
 if ! command -v "$PY" &>/dev/null; then PY=python3; fi
 
-if [ ! -d dealscout/.venv ]; then
-  "$PY" -m venv dealscout/.venv
-  source dealscout/.venv/bin/activate
-  pip install --index-url https://pypi.org/simple -r dealscout/requirements.txt
+if [ ! -d .venv ]; then
+  "$PY" -m venv .venv
+  source .venv/bin/activate
+  pip install --index-url https://pypi.org/simple -r requirements.txt
+  pip install --index-url https://pypi.org/simple -e .
 else
-  source dealscout/.venv/bin/activate
+  source .venv/bin/activate
 fi
 
-[ -f dealscout/.env ] || cp dealscout/.env.example dealscout/.env
+[ -f .env ] || cp .env.example .env
 
 export PYTHONPATH="$ROOT"
 export DEMO_MODE="${DEMO_MODE:-true}"
@@ -32,7 +33,7 @@ _free_port() {
 }
 
 _uvicorn_args=(
-  dealscout.api.main:app
+  api.main:app
   --host 0.0.0.0
   --port "$API_PORT"
   --reload
@@ -46,17 +47,17 @@ case "${1:-all}" in
     uvicorn "${_uvicorn_args[@]}"
     ;;
   ui)
-    streamlit run dealscout/ui/app.py
+    streamlit run ui/app.py
     ;;
   all)
     _free_port
     echo "DealPulse Scout API (demo pipeline v2) on :$API_PORT + UI on :8501 (DEMO_MODE=$DEMO_MODE)"
     uvicorn "${_uvicorn_args[@]}" &
     sleep 2
-    streamlit run dealscout/ui/app.py
+    streamlit run ui/app.py
     ;;
   *)
-    echo "Usage: ./dealscout/run.sh [api|ui|all]"
+    echo "Usage: ./run.sh [api|ui|all]"
     exit 1
     ;;
 esac

@@ -4,12 +4,12 @@ from datetime import datetime, timezone
 from typing import Any
 from urllib.parse import quote_plus
 
-from dealscout.agents.coordinator import SOURCES
-from dealscout.agents.query_parse import parse_query
-from dealscout.agents.state import DealScoutState, RawScrape
-from dealscout.config import DEMO_MODE
-from dealscout.db.demo_gen import synthesize_listings
-from dealscout.tools import brightdata_mcp
+from agents.coordinator import SOURCES
+from agents.query_parse import parse_query
+from agents.state import DealScoutState, RawScrape
+from config import DEMO_MODE
+from db.demo_gen import synthesize_listings
+from tools import brightdata_mcp
 
 logger = logging.getLogger(__name__)
 

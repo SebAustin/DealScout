@@ -7,9 +7,9 @@ from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
-from dealscout.agents.graph import run_search, run_search_stream
-from dealscout.config import DEMO_MODE
-from dealscout.db import cache
+from agents.graph import run_search, run_search_stream
+from config import DEMO_MODE
+from db import cache
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

@@ -22,4 +22,8 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["dealscout*"]
+include = ["agents*", "api*", "db*", "tools*"]
+
+[tool.setuptools.py-modules]
+config = "config"
+llm = "llm"

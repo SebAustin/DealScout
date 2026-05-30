@@ -3,7 +3,7 @@ import re
 import unicodedata
 from urllib.parse import quote_plus
 
-from dealscout.db.geo import city_state, zip_for_location
+from db.geo import city_state, zip_for_location
 
 # CarGurus entity IDs from /research/price-trends/ pages (make=m#, model=d#)
 _CARGURUS_MAKES: dict[str, str] = {

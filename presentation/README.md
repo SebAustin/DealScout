@@ -5,8 +5,8 @@
 Open in a browser:
 
 ```bash
-open dealscout/presentation/index.html
-# or: python -m http.server 8765 --directory dealscout/presentation
+open presentation/index.html
+# or: python -m http.server 8765 --directory presentation
 ```
 
 **Navigation:** Arrow keys, Space (next), Page Up/Down, Home/End.
@@ -16,10 +16,10 @@ open dealscout/presentation/index.html
 ### Option A — Script (headless Chrome)
 
 ```bash
-./dealscout/presentation/export-pdf.sh
+./presentation/export-pdf.sh
 ```
 
-Output: `dealscout/presentation/DealPulse_Scout_Slides.pdf`
+Output: `presentation/DealPulse_Scout_Slides.pdf`
 
 ### Option B — Browser Print
 

@@ -3,7 +3,7 @@ import hashlib
 from datetime import datetime, timezone
 from typing import Any
 
-from dealscout.db.urls import demo_url
+from db.urls import demo_url
 
 _SOURCES = ["CarGurus", "AutoTrader", "Craigslist"]
 _TRIM_SUFFIXES = ["", "Premium", "Sport"]
@@ -92,5 +92,5 @@ def synthesize_listings(query: str, plan: dict, limit: int = 3) -> list[dict[str
 
 
 def _guess_make_from_query(query: str) -> str:
-    from dealscout.agents.query_parse import parse_query
+    from agents.query_parse import parse_query
     return parse_query(query).get("make") or "Used"
