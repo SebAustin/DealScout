@@ -1,0 +1,378 @@
+/* DealPulse Scout — hackathon slide deck */
+:root {
+  --bg: #0f1419;
+  --surface: #1c2430;
+  --border: #3d4f63;
+  --text: #f0f4f8;
+  --muted: #b8c5d3;
+  --accent: #6cb6ff;
+  --accent2: #56d364;
+  --warn: #e3b341;
+  --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: "SF Mono", "Fira Code", "Consolas", monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  overflow: hidden;
+}
+
+.deck {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+}
+
+.slide {
+  display: none;
+  height: 100vh;
+  width: 100vw;
+  padding: 2.5rem 3.5rem;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--bg);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.slide.active {
+  display: flex;
+}
+
+.slide.title-slide {
+  text-align: center;
+  align-items: center;
+  background: linear-gradient(160deg, #0f1419 0%, #1a2838 50%, #0f1419 100%);
+}
+
+.slide.title-slide h1 {
+  font-size: 3.2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+  color: #ffffff;
+}
+
+.slide.title-slide .subtitle {
+  font-size: 1.35rem;
+  color: #c8d6e3;
+  max-width: 36rem;
+}
+
+.slide.title-slide .meta {
+  margin-top: 2.5rem;
+  font-size: 1rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.slide h1 {
+  font-size: 2.2rem;
+  font-weight: 650;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.02em;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 0.65rem;
+  color: #ffffff;
+}
+
+.slide h2 {
+  font-size: 1.2rem;
+  color: var(--accent);
+  margin: 1rem 0 0.5rem;
+  font-weight: 600;
+}
+
+.slide p, .slide li {
+  font-size: 1.1rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.slide ul, .slide ol {
+  margin-left: 1.5rem;
+  margin-top: 0.75rem;
+}
+
+.slide li {
+  margin-bottom: 0.45rem;
+}
+
+.slide .muted {
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.slide .two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.75rem;
+  margin-top: 0.75rem;
+  align-items: start;
+}
+
+.slide .two-col-wide {
+  grid-template-columns: 0.9fr 1.1fr;
+}
+
+.slide .card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.15rem 1.35rem;
+}
+
+.slide .card h3 {
+  font-size: 1.05rem;
+  color: var(--accent2);
+  margin-bottom: 0.45rem;
+}
+
+.slide .card p {
+  font-size: 1rem;
+  color: #dce4ec;
+}
+
+.slide pre, .slide code {
+  font-family: var(--mono);
+  font-size: 0.88rem;
+}
+
+.slide code {
+  color: #9cdcfe;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+}
+
+.slide pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.85rem 1.1rem;
+  margin-top: 0.75rem;
+  overflow-x: auto;
+  line-height: 1.45;
+  color: #e6edf3;
+}
+
+.slide .diagram {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 0.75rem;
+}
+
+.slide .arch-svg {
+  width: 100%;
+  height: auto;
+  max-height: 62vh;
+}
+
+.slide .screenshot {
+  width: 100%;
+  max-height: 58vh;
+  object-fit: contain;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  background: #fff;
+}
+
+.slide .screenshot-sm {
+  max-height: 42vh;
+}
+
+.slide table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.slide th, .slide td {
+  border: 1px solid var(--border);
+  padding: 0.55rem 0.85rem;
+  text-align: left;
+  color: var(--text);
+}
+
+.slide th {
+  background: var(--surface);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.slide .tag {
+  display: inline-block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.82rem;
+  margin: 0.15rem 0.2rem 0.15rem 0;
+  color: var(--accent);
+}
+
+.nav-hint {
+  position: fixed;
+  bottom: 1rem;
+  right: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  z-index: 100;
+}
+
+.slide-counter {
+  position: fixed;
+  bottom: 1rem;
+  left: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-family: var(--mono);
+  z-index: 100;
+}
+
+/* Print / PDF — high-contrast dark text on white */
+@media print {
+  html, body {
+    overflow: visible;
+    background: white !important;
+    color: #0d1117 !important;
+  }
+
+  .nav-hint, .slide-counter {
+    display: none !important;
+  }
+
+  .deck {
+    height: auto;
+    position: static;
+  }
+
+  .slide {
+    display: flex !important;
+    position: relative;
+    page-break-after: always;
+    break-after: page;
+    height: 100vh;
+    width: 100%;
+    background: white !important;
+    color: #0d1117 !important;
+    border: none;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .slide:last-child {
+    page-break-after: avoid;
+  }
+
+  .slide h1 {
+    color: #0d1117 !important;
+    border-bottom-color: #333 !important;
+  }
+
+  .slide h2 {
+    color: #0550ae !important;
+  }
+
+  .slide p,
+  .slide li,
+  .slide td,
+  .slide th,
+  .slide strong,
+  .slide em,
+  .slide pre,
+  .slide code {
+    color: #0d1117 !important;
+  }
+
+  .slide .muted {
+    color: #424a53 !important;
+  }
+
+  .slide.title-slide h1 {
+    color: #0d1117 !important;
+  }
+
+  .slide.title-slide .subtitle {
+    color: #424a53 !important;
+  }
+
+  .slide.title-slide .meta {
+    color: #0550ae !important;
+    font-weight: 700;
+  }
+
+  .slide .card {
+    background: #f6f8fa !important;
+    border-color: #8c959f !important;
+  }
+
+  .slide .card h3 {
+    color: #116329 !important;
+  }
+
+  .slide .card p {
+    color: #0d1117 !important;
+  }
+
+  .slide pre {
+    background: #f6f8fa !important;
+    border-color: #8c959f !important;
+    color: #0d1117 !important;
+  }
+
+  .slide code {
+    background: #eaeef2 !important;
+    color: #0550ae !important;
+  }
+
+  .slide th {
+    background: #dbeafe !important;
+    color: #0550ae !important;
+    border-color: #8c959f !important;
+  }
+
+  .slide td {
+    border-color: #8c959f !important;
+  }
+
+  .slide .tag {
+    background: #dbeafe !important;
+    border-color: #0550ae !important;
+    color: #0550ae !important;
+  }
+
+  .slide .diagram {
+    background: #ffffff !important;
+    border-color: #8c959f !important;
+  }
+
+  /* Architecture diagram: keep white labels on colored boxes */
+  .slide .arch-svg .box-label {
+    fill: #ffffff !important;
+  }
+
+  .slide .screenshot {
+    border-color: #8c959f !important;
+    box-shadow: none !important;
+  }
+
+  @page {
+    size: landscape;
+    margin: 0.45in;
+  }
+}
